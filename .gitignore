@@ -32,3 +32,5 @@
 
 # Ignore private message data
 /db/messages/messages.json
+
+/db/files/*.json
