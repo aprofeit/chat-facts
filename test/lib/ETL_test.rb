@@ -9,8 +9,7 @@ class ETLTest < ActiveSupport::TestCase
 
   test 'importing users' do
     User.delete_all
-
-    expected_users = ["Adam March",
+expected_users = ["Adam March",
                       "Alexander Profeit",
                       "Ashley Sexstone",
                       "Derek Pawsey",
@@ -28,14 +27,6 @@ class ETLTest < ActiveSupport::TestCase
     assert_equal expected_users.sort, User.find_each.map(&:name).sort
   end
 
-  test 'importing messages imports the correct amount of messages' do
-    etl.import_users
-
-    assert_difference 'Message.count', 1895 do
-      etl.import_messages
-    end
-  end
-
   test 'users exist after import' do
     etl.import_users
 
@@ -46,5 +37,24 @@ class ETLTest < ActiveSupport::TestCase
     assert_difference 'User.count', User.count * -1 do
       etl.implode
     end
+  end
+
+  test 'importing messages imports the correct amount of messages' do
+    etl.import_users
+
+    assert_difference 'Message.count', 1895 do
+      etl.import_messages
+    end
+  end
+
+  test 'the first message is what would be expected' do
+    etl.import_users
+    etl.import_messages
+
+    message = Message.first
+
+    expected_content = "Quote by Joseph Stalin: â\u0080\u009CQuantity has a quality all its own.â\u0080\u009D"
+
+    assert_equal expected_content, message.content
   end
 end
