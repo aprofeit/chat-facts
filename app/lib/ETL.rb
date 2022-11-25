@@ -18,7 +18,8 @@ class ETL
         kind: message['type'],
         is_unsent: message['is_unsent'],
         is_taken_down: message['is_taken_down'],
-        bumped_message_metadata: message['bumped_message_metadata']
+        bumped_message_metadata: message['bumped_message_metadata'],
+        reactions: message['reactions']
       )
     end
   end
