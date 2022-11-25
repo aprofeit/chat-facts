@@ -4,7 +4,7 @@ class ETLTest < ActiveSupport::TestCase
   attr_reader :etl
 
   setup do
-    @etl = ETL.new
+    @etl ||= ETL.new
   end
 
   test 'importing users' do

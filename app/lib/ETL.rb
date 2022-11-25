@@ -3,10 +3,10 @@ class ETL
     messages['participants'].flat_map(&:values).each do |name|
       User.create!(name: name)
     end
+  end
 
-    def implode
-      User.destroy_all
-    end
+  def implode
+    User.destroy_all
   end
 
   def import_messages
