@@ -17,8 +17,16 @@ class UserTest < ActiveSupport::TestCase
     etl.import_reactions
 
     user = User.find_by!(name: 'Dorina Rusu')
-    
     assert_equal 497, user.reactions.count
+  end
+
+  test 'can calculate the amount of messages a user has sent' do
+    etl.import_users
+    etl.import_messages
+    etl.import_reactions
+    
+    user = User.find_by!(name: 'Alexander Profeit')
+    assert_equal 254, user.messages.count
   end
 
   private
