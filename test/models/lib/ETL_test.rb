@@ -2,6 +2,8 @@ require 'test_helper'
 
 class ETLTest < ActiveSupport::TestCase
   test 'importing users' do
+    User.delete_all
+
     expected_users = ["Adam March",
                       "Alexander Profeit",
                       "Ashley Sexstone",
@@ -24,5 +26,11 @@ class ETLTest < ActiveSupport::TestCase
     ETL.new.import_users
 
     assert User.find_by(name: 'Alexander Profeit')
+  end
+
+  test 'reset deletes all associated models' do
+    assert_difference 'User.count', User.count * -1 do
+      ETL.new.reset
+    end
   end
 end

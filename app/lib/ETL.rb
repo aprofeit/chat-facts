@@ -3,6 +3,10 @@ class ETL
     messages['participants'].flat_map(&:values).each do |name|
       User.create!(name: name)
     end
+
+    def reset
+      User.destroy_all
+    end
   end
 
   private
