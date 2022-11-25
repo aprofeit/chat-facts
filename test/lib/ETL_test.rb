@@ -1,6 +1,12 @@
 require 'test_helper'
 
 class ETLTest < ActiveSupport::TestCase
+  attr_reader :etl
+
+  setup do
+    @etl = ETL.new
+  end
+
   test 'importing users' do
     User.delete_all
 
@@ -16,27 +22,29 @@ class ETLTest < ActiveSupport::TestCase
                       "Steph Melo"]
 
     assert_difference 'User.count', expected_users.size do
-      ETL.new.import_users
+      etl.import_users
     end
 
     assert_equal expected_users.sort, User.find_each.map(&:name).sort
   end
 
   test 'importing messages imports the correct amount of messages' do
+    etl.import_users
+
     assert_difference 'Message.count', 1895 do
-      ETL.new.import_messages
+      etl.import_messages
     end
   end
 
   test 'users exist after import' do
-    ETL.new.import_users
+    etl.import_users
 
     assert User.find_by(name: 'Alexander Profeit')
   end
 
-  test 'reset deletes all associated models' do
+  test 'implode deletes all associated models' do
     assert_difference 'User.count', User.count * -1 do
-      ETL.new.reset
+      etl.implode
     end
   end
 end

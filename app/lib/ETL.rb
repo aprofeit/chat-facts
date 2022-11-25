@@ -4,7 +4,7 @@ class ETL
       User.create!(name: name)
     end
 
-    def reset
+    def implode
       User.destroy_all
     end
   end
@@ -15,7 +15,7 @@ class ETL
         user: User.find_by!(name: message['sender_name']),
         sent_at: Time.at(message['timestamp_ms'] / 1000),
         content: message['content'],
-        type: message['type'],
+        kind: message['type'],
         is_unsent: message['is_unsent'],
         is_taken_down: message['is_taken_down'],
         bumped_message_metadata: message['bumped_message_metadata']

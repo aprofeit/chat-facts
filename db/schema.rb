@@ -17,11 +17,12 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_040412) do
   create_table "messages", force: :cascade do |t|
     t.bigint "user_id", null: false
     t.datetime "sent_at", null: false
-    t.text "content", null: false
-    t.string "type", null: false
+    t.text "content"
+    t.string "kind", null: false
     t.boolean "is_unsent", null: false
     t.boolean "is_taken_down", null: false
-    t.json "bumped_message_metadata"
+    t.json "bumped_message_metadata", null: false
+    t.json "reactions"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_messages_on_user_id"
