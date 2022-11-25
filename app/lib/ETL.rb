@@ -19,8 +19,15 @@ class ETL
         is_unsent: message['is_unsent'],
         is_taken_down: message['is_taken_down'],
         bumped_message_metadata: message['bumped_message_metadata'],
-        reactions: message['reactions']
       )
+    end
+  end
+
+  def import_reactions
+    Message.find_each do |message|
+      next unless message.reactions
+
+      message.reactions.create!(content: message['reactions'], user: message.user)
     end
   end
 

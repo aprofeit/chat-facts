@@ -58,4 +58,13 @@ expected_users = ["Adam March",
     assert_equal 'Justin Turple', message.user.name
     assert_equal "Quote by Joseph Stalin: â\u0080\u009CQuantity has a quality all its own.â\u0080\u009D", message.content
   end
+
+  test 'reactions should import by the expected number' do
+    etl.import_users
+    etl.import_messages
+
+    assert_difference 'Reaction.count', 1895 do
+      etl.import_reactions
+    end
+  end
 end

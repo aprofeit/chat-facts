@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_25_075342) do
+ActiveRecord::Schema[7.0].define(version: 2022_11_25_075824) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -28,6 +28,16 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_075342) do
     t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
+  create_table "reactions", force: :cascade do |t|
+    t.bigint "message_id", null: false
+    t.bigint "user_id", null: false
+    t.string "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["message_id"], name: "index_reactions_on_message_id"
+    t.index ["user_id"], name: "index_reactions_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "name", null: false
     t.datetime "created_at", null: false
@@ -36,4 +46,6 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_075342) do
   end
 
   add_foreign_key "messages", "users"
+  add_foreign_key "reactions", "messages"
+  add_foreign_key "reactions", "users"
 end
