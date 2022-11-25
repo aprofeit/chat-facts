@@ -3,4 +3,8 @@ namespace :etl do
   task users: :environment do
     ETL.new.import_users
   end
+
+  task reset: :environment do
+    User.delete_all
+  end
 end
