@@ -22,6 +22,12 @@ class ETLTest < ActiveSupport::TestCase
     assert_equal expected_users.sort, User.find_each.map(&:name).sort
   end
 
+  test 'importing messages imports the correct amount of messages' do
+    assert_difference 'Message.count', 1895 do
+      ETL.new.import_messages
+    end
+  end
+
   test 'users exist after import' do
     ETL.new.import_users
 
