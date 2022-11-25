@@ -34,8 +34,10 @@ expected_users = ["Adam March",
   end
 
   test 'implode deletes all associated models' do
-    assert_difference 'User.count', User.count * -1 do
-      etl.implode
+    assert_difference 'Message.count', Message.count * -1 do
+      assert_difference 'User.count', User.count * -1 do
+        etl.implode
+      end
     end
   end
 
@@ -53,8 +55,7 @@ expected_users = ["Adam March",
 
     message = Message.first
 
-    expected_content = "Quote by Joseph Stalin: â\u0080\u009CQuantity has a quality all its own.â\u0080\u009D"
-
-    assert_equal expected_content, message.content
+    assert_equal 'Justin Turple', message.user.name
+    assert_equal "Quote by Joseph Stalin: â\u0080\u009CQuantity has a quality all its own.â\u0080\u009D", message.content
   end
 end

@@ -1,3 +1,3 @@
 class User < ApplicationRecord
-  has_many :messages
+  has_many :messages, dependent: :delete_all
 end
