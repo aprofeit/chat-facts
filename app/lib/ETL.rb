@@ -1,11 +1,11 @@
 class ETL
   def import_users
     participants = messages['participants'].flat_map(&:values)
-    names = participants.map do |name|
+    user_params = participants.map do |name|
       { name: name }
     end
 
-    User.create!(names)
+    User.create!(user_params)
   end
 
   def destroy_all
