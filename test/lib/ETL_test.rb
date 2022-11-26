@@ -8,8 +8,8 @@ class ETLTest < ActiveSupport::TestCase
   end
 
   test 'importing users' do
-    User.delete_all
-expected_users = ["Adam March",
+    etl.destroy_all
+    expected_users = ["Adam March",
                       "Alexander Profeit",
                       "Ashley Sexstone",
                       "Derek Pawsey",
@@ -33,10 +33,12 @@ expected_users = ["Adam March",
     assert User.find_by(name: 'Alexander Profeit')
   end
 
-  test 'implode deletes all associated models' do
+  test 'destroy_all deletes all associated models' do
     assert_difference 'Message.count', Message.count * -1 do
       assert_difference 'User.count', User.count * -1 do
-        etl.implode
+        assert_difference 'Reaction.count', Reaction.count * -1 do
+          etl.destroy_all
+        end
       end
     end
   end
@@ -50,8 +52,7 @@ expected_users = ["Adam March",
   end
 
   test 'the first message is what would be expected' do
-    etl.import_users
-    etl.import_messages
+    etl.import
 
     message = Message.first
 
@@ -62,9 +63,20 @@ expected_users = ["Adam March",
   test 'reactions should import by the expected number' do
     etl.import_users
     etl.import_messages
+    user = User.find_by!(name: 'Dorina Rusu')
 
-    assert_difference 'Reaction.count', 1895 do
+    assert_difference 'user.reactions.count', 497 do
       etl.import_reactions
+    end
+  end
+
+  test 'import should import the expected number of models' do
+    assert_difference 'User.count', 10 do
+      assert_difference 'Message.count', 1895 do
+        assert_difference 'Reaction.count', 3741 do
+          etl.import
+        end
+      end
     end
   end
 end

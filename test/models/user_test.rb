@@ -12,18 +12,16 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'can calculate the amount of reactions a user has done' do
-    etl.import_users
-    etl.import_messages
-    etl.import_reactions
+    etl.import
 
     user = User.find_by!(name: 'Dorina Rusu')
-    assert_equal 497, user.reactions.count
+    assert_difference 'user.reactions.count', 497 do
+      etl.import_reactions
+    end
   end
 
   test 'can calculate the amount of messages a user has sent' do
-    etl.import_users
-    etl.import_messages
-    etl.import_reactions
+    etl.import
     
     user = User.find_by!(name: 'Alexander Profeit')
     assert_equal 254, user.messages.count
