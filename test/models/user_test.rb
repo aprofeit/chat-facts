@@ -12,7 +12,8 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'can calculate the amount of reactions a user has done' do
-    etl.import
+    etl.import_users
+    etl.import_messages
 
     user = User.find_by!(name: 'Dorina Rusu')
     assert_difference 'user.reactions.count', 497 do
@@ -33,9 +34,5 @@ class UserTest < ActiveSupport::TestCase
     {
       name: 'Trogdor',
     }
-  end
-
-  def messages
-    @message ||= JSON.load_file(Rails.root.join('test', 'fixtures', 'files', 'messages.json'))
   end
 end

@@ -1,8 +1,11 @@
 class ETL
   def import_users
-    messages['participants'].flat_map(&:values).each do |name|
-      User.create!(name: name)
+    participants = messages['participants'].flat_map(&:values)
+    names = participants.map do |name|
+      { name: name }
     end
+
+    User.create!(names)
   end
 
   def destroy_all
@@ -10,7 +13,7 @@ class ETL
   end
 
   def import_messages
-    messages['messages'].each do |message|
+    messages['messages'].map do |message|
       m = Message.new(
         user: User.find_by!(name: message['sender_name']),
         sent_at: Time.at(message['timestamp_ms'] / 1000),
@@ -22,15 +25,15 @@ class ETL
       )
 
       if message['reactions']
-        m.reactions = message['reactions'].map { |r| Reaction.new(content: r['reaction'], user: User.find_by!(name: r['actor'])) } 
+        m.reactions = message['reactions'].map { |r| Reaction.new(content: r['reaction'], user: User.find_by!(name: r['actor'])) }
       end
 
-      m.save!
-    end
+      m
+    end.each(&:save)
   end
 
   def import_reactions
-    Message.where.not(reactions: nil).find_each do |message|
+    Message.includes(:reactions).where.not(reactions: nil).find_each do |message|
       message.reactions.where.not(content: nil).create!(content: message['reactions'], user: message.user)
     end
   end
