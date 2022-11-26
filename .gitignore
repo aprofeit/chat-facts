@@ -34,3 +34,4 @@
 /db/messages/messages.json
 
 /db/files/*
+.DS_Store
