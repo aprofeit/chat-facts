@@ -1,20 +1,20 @@
 class ETL
   def import_users
     user_params = participants.map do |p|
-      { name: p }
+      { name: p.first }
     end
 
-    User.create!(user_params)
-  end
-
-  def destroy_all
-    User.destroy_all
+    user_params.each do |up|
+      User.find_or_create_by(up)
+    end
   end
 
   def import_messages
-    messages.map do |message|
-      m = Message.new(
-        user: User.find_by(name: message['sender_name']),
+    json_messages.map do |message|
+      unless user = User.find_by(name: message['sender_name'])
+        puts message['sender_name']
+      end
+      m = user.messages.build(
         sent_at: Time.at(message['timestamp_ms'] / 1000),
         content: message['content'],
         kind: message['type'],
@@ -46,6 +46,11 @@ class ETL
     import_reactions
   end
 
+  def reset_import
+    destroy_all
+    import
+  end
+
   private
 
   def message_files
@@ -53,10 +58,10 @@ class ETL
   end
 
   def participants
-    JSON.load_file(message_files.first)['participants'].map(&:values)
+    message_files.flat_map { |f| JSON.load_file(f)['participants'] }.map(&:values)
   end
 
-  def messages
+  def json_messages
     return @messages if @messages
 
     @messages = message_files.flat_map do |f|
