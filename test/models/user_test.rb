@@ -28,6 +28,12 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 254, user.messages.count
   end
 
+  test 'users can return their reactions' do
+    user = users(:batcat)
+
+    assert_equal 1, user.reactions.count
+  end
+
   private
 
   def valid_user_params

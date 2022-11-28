@@ -35,8 +35,8 @@ class ETLTest < ActiveSupport::TestCase
 
   test 'destroy_all deletes all associated models' do
     assert_difference 'Message.count', Message.count * -1 do
-      assert_difference 'User.count', User.count * -1 do
-        assert_difference 'Reaction.count', Reaction.count * -1 do
+      assert_difference 'Reaction.count', Reaction.count * -1 do
+        assert_difference 'User.count', User.count * -1 do
           etl.destroy_all
         end
       end
@@ -52,6 +52,7 @@ class ETLTest < ActiveSupport::TestCase
   end
 
   test 'the first message is what would be expected' do
+    etl.destroy_all
     etl.import
 
     message = Message.first
@@ -71,6 +72,8 @@ class ETLTest < ActiveSupport::TestCase
   end
 
   test 'import should import the expected number of models' do
+    etl.destroy_all
+
     assert_difference 'User.count', 10 do
       assert_difference 'Message.count', 1895 do
         assert_difference 'Reaction.count', 3741 do

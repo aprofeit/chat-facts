@@ -39,9 +39,9 @@ class ETL
   end
 
   def destroy_all
-    User.delete_all
-    Message.delete_all
     Reaction.delete_all
+    Message.delete_all
+    User.delete_all
   end
 
   def import
