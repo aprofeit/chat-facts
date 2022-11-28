@@ -11,9 +11,8 @@ class ETL
 
   def import_messages
     json_messages.map do |message|
-      unless user = User.find_by(name: message['sender_name'])
-        puts message['sender_name']
-      end
+      User.find_or_create_by(name: message['sender_name'])
+
       m = user.messages.build(
         sent_at: Time.at(message['timestamp_ms'] / 1000),
         content: message['content'],
