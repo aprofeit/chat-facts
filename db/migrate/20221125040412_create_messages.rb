@@ -8,7 +8,7 @@ class CreateMessages < ActiveRecord::Migration[7.0]
       t.boolean :is_unsent, null: false
       t.boolean :is_taken_down, null: false
       t.json :bumped_message_metadata, null: false
-      t.json :reactions
+      t.json :json_reactions
 
       t.timestamps
     end

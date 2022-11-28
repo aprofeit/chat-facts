@@ -22,19 +22,18 @@ class ETL
         is_unsent: message['is_unsent'],
         is_taken_down: message['is_taken_down'],
         bumped_message_metadata: message['bumped_message_metadata'],
+        json_reactions: message['reactions']
       )
-
-      if message['reactions']
-        m.reactions = message['reactions'].map { |r| Reaction.new(content: r['reaction'], user: User.find_by!(name: r['actor'])) }
-      end
 
       m
     end.each(&:save)
   end
 
   def import_reactions
-    Message.includes(:reactions).where.not(reactions: nil).find_each do |message|
-      message.reactions.where.not(content: nil).create!(content: message['reactions'], user: message.user)
+    Message.where.not(json_reactions: nil).find_each do |message|
+      message.json_reactions.each do |r|
+        message.user.reactions.create!(content: r['content'], user: message.user, message: message)
+      end
     end
   end
 
