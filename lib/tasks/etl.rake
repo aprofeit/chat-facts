@@ -27,8 +27,13 @@ namespace :etl do
   end
 
   desc 'Reset with current message files'
-  task reset: :environment do
+  task initialize: [:environment] do
     etl.destroy_all
+    etl.import
+  end
+
+  desc 'Import from db/files/messages' do
+  task import: :environment
     etl.import
   end
 end

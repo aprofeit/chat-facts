@@ -27,7 +27,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test 'can calculate the amount of messages a user has sent' do
-    etl.import
+    etl.reset_import
     
     user = User.find_by!(name: 'Alexander Profeit')
 

@@ -1,21 +1,19 @@
 class ETL
   def import_users
-    participants = messages['participants'].flat_map(&:values)
-    user_params = participants.map do |name|
-      { name: name }
+    user_params = participants.map do |p|
+      { name: p.first }
     end
 
-    User.create!(user_params)
-  end
-
-  def destroy_all
-    User.destroy_all
+    user_params.each do |up|
+      User.find_or_create_by(up)
+    end
   end
 
   def import_messages
-    messages['messages'].map do |message|
-      m = Message.new(
-        user: User.find_by!(name: message['sender_name']),
+    json_messages.map do |message|
+      user = User.find_or_create_by(name: message['sender_name'])
+
+      m = user.messages.build(
         sent_at: Time.at(message['timestamp_ms'] / 1000),
         content: message['content'],
         kind: message['type'],
@@ -24,8 +22,6 @@ class ETL
         bumped_message_metadata: message['bumped_message_metadata'],
         json_reactions: message['reactions']
       )
-
-      m
     end.each(&:save)
   end
 
@@ -49,9 +45,24 @@ class ETL
     import_reactions
   end
 
-  private
+  def reset_import
+    destroy_all
+    import
+  end
 
-  def messages
-    @message ||= JSON.load_file(Rails.root.join('test', 'fixtures', 'files', 'messages.json'))
+  def message_files
+    Rails.application.config.x.messages_path
+  end
+
+  def participants
+    message_files.flat_map { |f| JSON.load_file(f)['participants'] }.map(&:values)
+  end
+
+  def json_messages
+    return @messages if @messages
+
+    @messages = message_files.flat_map do |f|
+      JSON.load_file(f)['messages']
+    end
   end
 end
