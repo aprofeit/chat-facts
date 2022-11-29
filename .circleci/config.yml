@@ -1,0 +1,4 @@
+version 2.1
+
+orbs:
+  ruby-rails-setup: later/ruby-rails-setup0.0.5
