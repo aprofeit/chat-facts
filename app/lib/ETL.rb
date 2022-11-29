@@ -11,7 +11,7 @@ class ETL
 
   def import_messages
     json_messages.map do |message|
-      User.find_or_create_by(name: message['sender_name'])
+      user = User.find_or_create_by(name: message['sender_name'])
 
       m = user.messages.build(
         sent_at: Time.at(message['timestamp_ms'] / 1000),
@@ -50,10 +50,8 @@ class ETL
     import
   end
 
-  private
-
   def message_files
-    Dir.glob(Rails.root.join('db', 'files', '*.json'))
+    Rails.application.config.x.messages_path
   end
 
   def participants

@@ -18,5 +18,7 @@ module ChatFacts
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    config.x.messages_path = [Rails.root.join('test', 'fixtures', 'files', 'messages.json')]
   end
 end
