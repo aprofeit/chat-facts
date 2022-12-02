@@ -1,0 +1,64 @@
+.container {
+  font-family: 'Open Sans';
+  display: flex;
+  flex-direction: column;
+  max-width: 320px;
+  margin: 60px auto;
+}
+
+.records-container {
+  margin-bottom: 24px;
+}
+
+.data-range-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.date-range-dates {
+  margin-left: auto;
+  color: #19E7A9;
+  letter-spacing: 2px;
+}
+
+.title {
+ letter-spacing: -2px;
+ color: #ECECEC;
+ font-weight: 800; font-size: 52px;
+ margin-bottom: 14px;
+}
+
+.date-range {
+  text-transform: uppercase;
+  color: #FF8787;
+  letter-spacing: 3px;
+  margin-bottom: 58px;
+}
+
+.records-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.record-label {
+  font-size: 19px;
+  font-weight: 500;
+  color: #ECECEC;
+  letter-spacing: -1px;
+  margin-bottom: 6px;
+}
+
+.record-name {
+  font-size: 18px;
+  font-weight: 300;
+  color: #F3F49A;
+}
+
+.record-right-side {
+  margin-left: auto;
+}
+
+.record-number {
+  color: #EEFFAC;
+  font-size: 50px;
+}
