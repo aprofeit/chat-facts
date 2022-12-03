@@ -15,11 +15,6 @@ class PagesController < ApplicationController
         label: 'Reacted to a Message',
         name: 'Steph',
         value: 69
-      },
-      {
-        label: 'Mentioned',
-        name: 'Pawsey',
-        value: 420
       }
     ]
   end
