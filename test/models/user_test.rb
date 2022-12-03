@@ -44,6 +44,17 @@ class UserTest < ActiveSupport::TestCase
     assert_equal 1, user.reactions.count
   end
 
+  test 'users have the expected amount of received reactions' do
+    etl.reset_import
+
+    user = User.find_by!(name: 'Justin Turple')
+
+    assert_equal 8, user.reactions.count
+  end
+
+  test 'users have the expected amount of sent reactions' do
+  end
+
   private
 
   def valid_user_params

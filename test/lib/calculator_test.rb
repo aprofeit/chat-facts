@@ -12,5 +12,4 @@ class CalculatorTest < ActiveSupport::TestCase
 
     assert_equal 59, actual_message_count
   end
-
 end
