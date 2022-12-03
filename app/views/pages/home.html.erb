@@ -18,50 +18,24 @@
       </div>
     </div>
 
-    <div class="records-container">
-      <div>
-        <div class="record-label">
-          Sent Messages
+    <% @records.each do |r| %>
+      <div class="records-container">
+        <div>
+          <div class="record-label">
+            <%= r[:label] %>
+          </div>
+
+          <div class="record-name">
+            <%= r[:name] %>
+          </div>
         </div>
 
-        <div class="record-name">
-          Alexander Profeit
+        <div class="record-right-side">
+          <div class="record-number">
+            <%= r[:value] %>
+          </div>
         </div>
       </div>
-
-      <div class="record-right-side">
-        <div class="record-number">
-          45
-        </div>
-      </div>
-    </div>
-
-    <div class="records-container">
-      <div>
-        <div class="record-label">
-          Reacted
-        </div>
-
-        <div class="record-name">
-          Yannis
-        </div>
-      </div>
-
-      <div class="record-right-side">
-        <div class="record-number">
-          17
-        </div>
-      </div>
-    </div>
+    <% end %>
   </div>
-
-
-  <div class="record">
-    <div class="label-and-winner">
-    </div>
-
-    <div class="number">
-    </div>
-  </div>
-
 </div>
