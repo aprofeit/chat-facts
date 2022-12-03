@@ -3,7 +3,7 @@ class CreateReactions < ActiveRecord::Migration[7.0]
     create_table :reactions do |t|
       t.belongs_to :message, null: false, foreign_key: true
       t.belongs_to :user, null: false, foreign_key: true
-      t.string :content
+      t.string :content, null :false
 
       t.timestamps
     end

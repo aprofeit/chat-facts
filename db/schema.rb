@@ -10,9 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_11_25_075824) do
+ActiveRecord::Schema[7.0].define(version: 2022_12_01_073411) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "leaderboards", force: :cascade do |t|
+    t.string "token"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["token"], name: "index_leaderboards_on_token", unique: true
+  end
 
   create_table "messages", force: :cascade do |t|
     t.bigint "user_id", null: false
@@ -22,20 +29,10 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_075824) do
     t.boolean "is_unsent", null: false
     t.boolean "is_taken_down", null: false
     t.json "bumped_message_metadata", null: false
-    t.json "reactions"
+    t.json "json_reactions"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_messages_on_user_id"
-  end
-
-  create_table "reactions", force: :cascade do |t|
-    t.bigint "message_id", null: false
-    t.bigint "user_id", null: false
-    t.string "content"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["message_id"], name: "index_reactions_on_message_id"
-    t.index ["user_id"], name: "index_reactions_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -46,6 +43,4 @@ ActiveRecord::Schema[7.0].define(version: 2022_11_25_075824) do
   end
 
   add_foreign_key "messages", "users"
-  add_foreign_key "reactions", "messages"
-  add_foreign_key "reactions", "users"
 end
