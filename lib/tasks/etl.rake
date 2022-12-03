@@ -23,12 +23,12 @@ namespace :etl do
 
   desc 'Delete existing models'
   task destroy_all: :environment do
-    etl.destroy_all
+    etl.delete_all
   end
 
   desc 'Reset with current message files'
   task initialize: [:environment] do
-    etl.destroy_all
+    etl.delete_all
     etl.import
   end
 

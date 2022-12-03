@@ -8,7 +8,7 @@ class ETLTest < ActiveSupport::TestCase
   end
 
   test 'importing users' do
-    etl.destroy_all
+    etl.delete_all
     expected_users = ["Adam March",
                       "Alexander Profeit",
                       "Ashley Sexstone",
@@ -37,7 +37,7 @@ class ETLTest < ActiveSupport::TestCase
     assert_difference 'Message.count', Message.count * -1 do
       assert_difference 'Reaction.count', Reaction.count * -1 do
         assert_difference 'User.count', User.count * -1 do
-          etl.destroy_all
+          etl.delete_all
         end
       end
     end
@@ -54,7 +54,7 @@ class ETLTest < ActiveSupport::TestCase
   end
 
   test 'the first message is what would be expected' do
-    etl.destroy_all
+    etl.delete_all
     etl.import
 
     message = Message.first
@@ -79,7 +79,7 @@ class ETLTest < ActiveSupport::TestCase
   end
 
   test 'import should import the expected number of models' do
-    etl.destroy_all
+    etl.delete_all
 
     expected_user_count = test_messages['participants'].size
     expected_message_count = test_messages['messages'].size

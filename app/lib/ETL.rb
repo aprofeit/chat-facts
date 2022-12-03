@@ -33,7 +33,7 @@ class ETL
     end
   end
 
-  def destroy_all
+  def delete_all
     Reaction.delete_all
     Message.delete_all
     User.delete_all
@@ -46,7 +46,7 @@ class ETL
   end
 
   def reset_import
-    destroy_all
+    delete_all
     import
   end
 
