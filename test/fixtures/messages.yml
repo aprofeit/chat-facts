@@ -1,0 +1,9 @@
+hello_world:
+  user: batcat
+  sent_at: <%= DateTime.now %>
+  kind: Generic
+  is_unsent: false
+  is_taken_down: false
+  bumped_message_metadata: {}
+  content: Hello, world!
+  created_at: <%= DateTime.parse('2022-11-01') %>

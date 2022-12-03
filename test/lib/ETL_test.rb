@@ -35,8 +35,8 @@ class ETLTest < ActiveSupport::TestCase
 
   test 'destroy_all deletes all associated models' do
     assert_difference 'Message.count', Message.count * -1 do
-      assert_difference 'User.count', User.count * -1 do
-        assert_difference 'Reaction.count', Reaction.count * -1 do
+      assert_difference 'Reaction.count', Reaction.count * -1 do
+        assert_difference 'User.count', User.count * -1 do
           etl.destroy_all
         end
       end
@@ -46,12 +46,15 @@ class ETLTest < ActiveSupport::TestCase
   test 'importing messages imports the correct amount of messages' do
     etl.import_users
 
-    assert_difference 'Message.count', 1895 do
+    expected_message_count = test_messages['messages'].size
+
+    assert_difference 'Message.count', expected_message_count do
       etl.import_messages
     end
   end
 
   test 'the first message is what would be expected' do
+    etl.destroy_all
     etl.import
 
     message = Message.first
@@ -64,19 +67,39 @@ class ETLTest < ActiveSupport::TestCase
     etl.import_users
     etl.import_messages
     user = User.find_by!(name: 'Dorina Rusu')
+    expected_reaction_count = test_messages['messages']
+      .filter { |m| m['sender_name'] == 'Dorina Rusu' }
+      .filter { |m| m['reactions'] }
+      .flat_map { |m| m['reactions'] }
+      .size
 
-    assert_difference 'user.reactions.count', 497 do
+    assert_difference -> { user.reactions.count }, expected_reaction_count do
       etl.import_reactions
     end
   end
 
   test 'import should import the expected number of models' do
-    assert_difference 'User.count', 10 do
-      assert_difference 'Message.count', 1895 do
-        assert_difference 'Reaction.count', 3741 do
+    etl.destroy_all
+
+    expected_user_count = test_messages['participants'].size
+    expected_message_count = test_messages['messages'].size
+    expected_reaction_count = test_messages['messages']
+      .filter { |m| m['reactions'] }
+      .flat_map { |m| m['reactions'] }
+      .size
+
+    assert_difference 'User.count', expected_user_count do
+      assert_difference 'Message.count', expected_message_count do
+        assert_difference 'Reaction.count', expected_reaction_count do
           etl.import
         end
       end
     end
+  end
+
+  private
+
+  def test_messages
+    JSON.load_file(Rails.root.join('test', 'fixtures', 'files', 'messages.json'))
   end
 end
