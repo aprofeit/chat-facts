@@ -10,6 +10,16 @@ class PagesController < ApplicationController
         label: 'Received Reactions',
         name: 'Yannis Fotiadis',
         value: 17
+      },
+      {
+        label: 'Reacted to a Message',
+        name: 'Steph',
+        value: 69
+      },
+      {
+        label: 'Mentioned',
+        name: 'Pawsey',
+        value: 420
       }
     ]
   end
